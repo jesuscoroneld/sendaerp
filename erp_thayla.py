@@ -1,4 +1,3 @@
-
 """
 ╔══════════════════════════════════════════════════════════════╗
 ║         SENDA ERP — Sistema de Gestión Empresarial          ║
@@ -2259,6 +2258,8 @@ def frontend(path=''):
 # ─────────────────────────────────────────────────────────────
 
 def init_db():
+    """Inicializa la base de datos. Se llama al importar el módulo
+    para que funcione tanto con `python app.py` como con gunicorn."""
     with app.app_context():
         db.create_all()
         # Crear admin por defecto si no existe
@@ -2323,8 +2324,10 @@ def init_db():
 # RUN
 # ─────────────────────────────────────────────────────────────
 
+# Llamada a nivel de módulo: funciona con python app.py Y con gunicorn
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     print("""
 ╔══════════════════════════════════════════════════════╗
 ║          SENDA ERP — Iniciando servidor              ║
@@ -2332,4 +2335,4 @@ if __name__ == '__main__':
 ║  User: admin  |  Pass: admin123                      ║
 ╚══════════════════════════════════════════════════════╝
     """)
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
